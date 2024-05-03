@@ -14,4 +14,8 @@ taskController.delete('/delete', async(req, res)=>{
     const data = await m$task.deleteTask(req)
     response.sendResponse(res, data)
 })
+taskController.put('/edit', async(req, res)=>{
+    const data = await m$task.editTask(req)
+    response.sendResponse(res, data)
+})
 export default taskController

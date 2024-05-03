@@ -39,11 +39,20 @@ class _task{
             const value = [`${payload.iduser}`]
             const data = await runQuery(sql, value)
             if(data){
+                if (data.length<1){
+                    return{
+                        status: false,
+                        code:404,
+                        message:"There no tasks in this profile"
+                    }
+                }
                 return{
                     status: true,
                     message:"FIND TASK SUCCESS",
                     data: data
                 }
+            }
+            else{
             }
         }
         catch(err){
@@ -55,7 +64,66 @@ class _task{
             }
         }
     }
-    deleteTask= async(req)=>{
+    editTask=async(req)=>{
+        try{
+            const payload = req.body
+            // const sql = 'UPDATE `task` SET `name` WHERE `idtask`=?'
+            const sqlFindTask = 'SELECT * FROM `task` WHERE `idtask`=?'
+            const valueFindTask= [`${payload.idtask}`]
+            const findTask = await runQuery(sqlFindTask, valueFindTask)
+            if(findTask){
+                if (findTask.length<1){
+                    return{
+                        status: false,
+                        code:404,
+                        message:"There no tasks in this profile"
+                    }
+                }
+                let sqlEditUser = 'UPDATE `task` SET '
+                let valuesEditTask = []
+                if(payload.nametask){
+                    sqlEditUser+='`nametask`=?, '
+                    valuesEditTask.push(payload.nametask)
+                }
+                if(payload.typetask){
+                    sqlEditUser+='`typetask`=?, '
+                    valuesEditTask.push(payload.typetask)
+                }
+                if(payload.status){
+                    sqlEditUser+='`status`=?, '
+                    valuesEditTask.push(payload.status)
+                }
+                if(payload.created_at){
+                    sqlEditUser+='`created_at`=?, '
+                    valuesEditTask.push(payload.created_at)
+                }
+                if(payload.finished_at){
+                    sqlEditUser+='`finished_at`=?, '
+                    valuesEditTask.push(payload.finished_at)
+                }
+                sqlEditUser=sqlEditUser.slice(0, -2)
+                sqlEditUser+=' WHERE `idtask`=?'
+                valuesEditTask.push(payload.idtask)
+                const resultEditTask= await runQuery(sqlEditUser, valuesEditTask)
+                if(resultEditTask.length<1){
+                    return{
+                        status: false,
+                        code:500,
+                        message:"EDIT TASK MODULE IN TASK.MODULE ERROR"
+                    }
+                }
+                return{
+                    status: true,
+                    message:"EDIT TASK SUCCESS",
+                    data: resultEditTask
+                }
+            }
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+    deleteTask=async(req)=>{
         try{
             const payload = req.body
             const sql = 'DELETE FROM `task` WHERE `idtask`=?'

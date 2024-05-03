@@ -74,7 +74,7 @@ class _task{
             return{
                 status: false,
                 code:500,
-                message:"DELETE TASK MODULE IN TASK.MODULE ERROR"
+                message:"DELETE TASK MODULE IN TASK.MODULE ERROR "
             }
         }
     }

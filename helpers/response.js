@@ -12,7 +12,7 @@ class _response{
             return true
         }catch(error){
             console.error('sendResponse response helpers error', error)
-            res.status(400).send(data)
+            res.status(501).send(data)
             return false
         }
     }
